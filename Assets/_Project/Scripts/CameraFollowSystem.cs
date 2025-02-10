@@ -3,7 +3,7 @@ using UnityEngine;
 public class CameraFollowSystem : MonoBehaviour
 {
     [SerializeField] private Transform _target;
-    [SerializeField] private float _distance = 15f;
+    [SerializeField] private float _distance = 7f;
     [SerializeField] private float _height = 5f;
     [SerializeField] private float _positionSmoothTime = 0.2f;
     [SerializeField] private float _rotationSmoothTime = 0.1f;
@@ -21,7 +21,8 @@ public class CameraFollowSystem : MonoBehaviour
     {
         Vector3 desiredPosition = _target.position + _target.TransformDirection(_offset);
 
-        transform.position = Vector3.SmoothDamp(transform.position, desiredPosition, ref _currentVelocity, _positionSmoothTime);
+        transform.position = Vector3.SmoothDamp(new Vector3(transform.position.x, 0, transform.position.z), desiredPosition, ref _currentVelocity, _positionSmoothTime);
+        transform.position = new Vector3(transform.position.x, desiredPosition.y, transform.position.z);
 
         Quaternion desiredRotation = Quaternion.LookRotation(_target.position - transform.position, _target.up);
 
