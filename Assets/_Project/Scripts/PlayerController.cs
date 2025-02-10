@@ -22,10 +22,10 @@ public class PlayerController : MonoBehaviour
         _animator = GetComponent<Animator>();
         _rigidbody = GetComponent<Rigidbody>();
 
-//#if UNITY_EDITOR
-//        Cursor.lockState = CursorLockMode.Locked;
-//        Cursor.visible = false;
-//#endif
+#if UNITY_EDITOR
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+#endif
     }
 
     private void Update()
@@ -47,7 +47,8 @@ public class PlayerController : MonoBehaviour
             _animator.SetBool("IsFlying", true);
             foreach(var particle in _particles)
             {
-                particle.Play();
+                if (!particle.isPlaying)
+                    particle.Play();
             }
 
             Vector3 movementDirection = transform.forward * _movementInput.z + transform.right * _movementInput.x + transform.up * _movementInput.y;
@@ -64,7 +65,8 @@ public class PlayerController : MonoBehaviour
             _animator.SetBool("IsFlying", false);
             foreach (var particle in _particles)
             {
-                particle.Stop();
+                if (particle.isPlaying)
+                    particle.Stop();
             }
 
             transform.rotation = Quaternion.Lerp(transform.rotation, 
